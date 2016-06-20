@@ -23,7 +23,7 @@ import org.apache.spark.streaming.{Milliseconds, StreamingContext}
 import org.apache.spark.SparkConf
 import com.datastax.spark.connector.embedded.EmbeddedKafka
 
-import scala.concurrent.Future
+import scala.concurrent.{Future, Await}
 
 /** Runnable. Requires running these in cqlsh
   * {{{
@@ -111,8 +111,9 @@ class KillrWeather(system: ExtendedActorSystem) extends Extension {
 
       (guardian ? GracefulShutdown).mapTo[Future[Boolean]]
         .onComplete { _ =>
-        system.shutdown()
-        system.awaitTermination(timeout.duration)
+        system.terminate()
+        Await.result(system.terminate(),timeout.duration)
+        // system.awaitTermination(timeout.duration)
       }
     }
   }

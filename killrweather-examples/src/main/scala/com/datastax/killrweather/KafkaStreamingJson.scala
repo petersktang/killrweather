@@ -5,9 +5,9 @@ import com.datastax.killrweather.GitHubEvents.MonthlyCommits
 import kafka.producer.{KeyedMessage, Producer}
 import kafka.serializer.StringDecoder
 import org.apache.spark.streaming.{Seconds, StreamingContext}
-import org.apache.spark.rdd.RDD
+// import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkContext, SparkConf}
-import org.apache.spark.sql.{Row, SQLContext}
+import org.apache.spark.sql.SQLContext
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.kafka.KafkaUtils
 import com.datastax.spark.connector.cql.CassandraConnector
@@ -19,7 +19,7 @@ import com.datastax.spark.connector.embedded.{Assertions, EmbeddedKafka}
  *      for a cleaner version without Spark SQL doing the JSON mapping.
  */
 object KafkaStreamingJson extends App with Assertions {
-  import com.datastax.spark.connector.streaming._
+  //import com.datastax.spark.connector.streaming._
   import com.datastax.spark.connector._
 
   /* Small sample data */
@@ -61,7 +61,7 @@ object KafkaStreamingJson extends App with Assertions {
     /* this check is here to handle the empty collection error
        after the 3 items in the static sample data set are processed */
       if (rdd.toLocalIterator.nonEmpty) {
-        sqlContext.jsonRDD(rdd).registerTempTable("mytable")
+        sqlContext.read.json(rdd).registerTempTable("mytable")
         sqlContext.sql(
           "SELECT user, commits, month, year FROM mytable WHERE commits >= 5 AND year = 2015")
           .map(MonthlyCommits(_))
@@ -75,7 +75,7 @@ object KafkaStreamingJson extends App with Assertions {
 
   /* validate */
   val table = sc.cassandraTable("githubstats", "monthly_commits")
-  awaitCond(table.collect.size > 1, 8.seconds)
+  awaitCond(table.collect.length > 1, 8.seconds)
   table.toLocalIterator foreach println
 
   ssc.awaitTermination()

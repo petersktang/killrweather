@@ -59,7 +59,7 @@ object KafkaStreamingJson2 extends App with Assertions {
 
   /* validate */
   val table = ssc.cassandraTable[MonthlyCommits]("githubstats", "monthly_commits")
-  awaitCond(table.collect.size > 1, 5.seconds)
+  awaitCond(table.collect.length > 1, 5.seconds)
   table.toLocalIterator foreach println
 
   ssc.awaitTermination()

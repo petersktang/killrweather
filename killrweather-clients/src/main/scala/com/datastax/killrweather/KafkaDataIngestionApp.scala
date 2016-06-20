@@ -122,9 +122,9 @@ class KafkaPublisherActor(val producerConfig: ProducerConfig) extends KafkaProdu
 class HttpDataFeedActor(kafka: ActorRef) extends Actor with ActorLogging with ClientHelper {
 
   import Sources._
-  import context.dispatcher
-  import akka.stream.scaladsl._
-  import akka.stream.scaladsl.Flow
+  // import context.dispatcher
+  // import akka.stream.scaladsl._
+  // import akka.stream.scaladsl.Flow
 
   implicit val system = context.system
 
@@ -138,7 +138,7 @@ class HttpDataFeedActor(kafka: ActorRef) extends Actor with ActorLogging with Cl
     case HttpRequest(HttpMethods.POST, Uri.Path("/weather/data"), headers, entity, _) =>
       HttpSource.unapply(headers,entity).collect { case hs: HeaderSource =>
         hs.extract.foreach({ fs: FileSource =>
-          log.info(s"Ingesting {} and publishing {} data points to Kafka topic {}.", fs.name, fs.data.size, KafkaTopic)
+          log.info(s"Ingesting {} and publishing {} data points to Kafka topic {}.", fs.name, fs.data.length, KafkaTopic)
           kafka ! KafkaMessageEnvelope[String, String](KafkaTopic, KafkaKey, fs.data:_*)
         })
         HttpResponse(200, entity = HttpEntity(MediaTypes.`text/html`, s"POST [${hs.sources.mkString}] successful."))
