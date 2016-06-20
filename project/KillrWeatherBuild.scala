@@ -108,6 +108,7 @@ object Dependencies {
     val kafka             = "org.apache.kafka"    %% "kafka"                              % Kafka kafkaExclusions // ApacheV2
     val kafkaStreaming    = "org.apache.spark"    %% "spark-streaming-kafka"              % Spark sparkExclusions // ApacheV2
     val logback           = "ch.qos.logback"      % "logback-classic"                     % Logback
+    val scalazCore        = "org.scalaz"          %% "scalaz-core"                        % Scalaz
     val scalazContrib     = "org.typelevel"       %% "scalaz-contrib-210"                 % ScalazContrib   // MIT
     val scalazContribVal  = "org.typelevel"       %% "scalaz-contrib-validation"          % ScalazContrib   // MIT
     val pickling          = "org.scala-lang.modules" %% "scala-pickling"                  % Pickling
@@ -135,7 +136,7 @@ object Dependencies {
 
   val logging = Seq(logback, slf4jApi)
 
-  val scalaz = Seq(scalazContrib, scalazContribVal, scalazStream)
+  val scalaz = Seq(scalazCore, /*scalazContrib, scalazContribVal,*/ scalazStream)
 
   val time = Seq(jodaConvert, jodaTime)
 
