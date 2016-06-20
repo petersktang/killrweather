@@ -94,6 +94,7 @@ object Dependencies {
     val akkaStream        = "com.typesafe.akka"   %% "akka-stream-experimental"           % AkkaStreams
     val akkaHttpCore      = "com.typesafe.akka"   %% "akka-http-core-experimental"        % AkkaStreams
     val akkaActor         = "com.typesafe.akka"   %% "akka-actor"                         % Akka
+    val akkaStreamCore    = "com.typesafe.akka"   %% "akka-stream"                        % Akka
     val akkaCluster       = "com.typesafe.akka"   %% "akka-cluster"                       % Akka
     val akkaRemote        = "com.typesafe.akka"   %% "akka-remote"                        % Akka
     val akkaSlf4j         = "com.typesafe.akka"   %% "akka-slf4j"                         % Akka
@@ -128,7 +129,7 @@ object Dependencies {
 
   import Compile._
 
-  val akka = Seq(akkaStream, akkaHttpCore, akkaActor, akkaCluster, akkaRemote, akkaSlf4j)
+  val akka = Seq(akkaStream, akkaStreamCore, akkaHttpCore, akkaActor, akkaCluster, akkaRemote, akkaSlf4j)
 
   val connector = Seq(driver, sparkCassandra, sparkCatalyst, sparkCassandraEmb)
 
